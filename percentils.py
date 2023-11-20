@@ -1,13 +1,35 @@
 import pickle
 import matplotlib.pyplot as plt
-import pandas as pd
+# import pandas as pd
+from funcions import llegir_pkl
 
-flag = True
-if flag:
+# flags ______________________________________________________________________________________________________________
+flags = {
+    'percentils.pkl': True,
+    'Plot_general': False
+}
+
+# main _______________________________________________________________________________________________________________
+if flags['percentils.pkl']:
+    path = r"D:\tfg\percentils.pkl"
+    percentils = llegir_pkl(path)
+
+    percentils_reformat = {}
+
+    punts_malla = [353, 764, 912, 1021, 1291, 1319, 1339, 1366]
+    variables = ['elev_hydro', 'elev_wavedpt', 'Hs_wavedpt', 'Tp_wavedpt', 'Dp_wavedpt']
+
+    for punt in punts_malla:
+        percentils_reformat[punt] = {}
+        for var in variables:
+            percentils_reformat[punt][var] = {}
+            for year in percentils.keys():
+                percentils_reformat[punt][var][year] = percentils[year][var][punt]
+
+if flags['Plot_general']:
     # ara llegim sa variable percentils
     with open(r"D:\tfg\percentils.pkl", 'rb') as f:
         percentils = pickle.load(f)
-    del f
 
     # reformatejam el diccionari percentils perquè les keys siguin els punts de malla
     percentils_reformat = {}
@@ -15,7 +37,6 @@ if flag:
         percentils_reformat[punt] = {}
         for year in percentils.keys():
             percentils_reformat[punt][year] = percentils[year]['Hs_wavedpt'][punt]
-    del punt, year
 
     # representam en un gràfic els percentils de cada punt de malla
     # volem fixar l'altura vertical a valors vixes compresos entre els 1 i 5 metres
@@ -27,7 +48,5 @@ if flag:
         ax[i // 4, i % 4].set_ylabel('Hs (m)')
         ax[i // 4, i % 4].grid()
         ax[i // 4, i % 4].set_ylim(1, 5.5)
-    del i, punt
     plt.tight_layout()
     plt.show()
-    del fig, ax

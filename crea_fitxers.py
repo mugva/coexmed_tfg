@@ -26,7 +26,6 @@ if flags['Crea_csv_coords']:
     res = input('Vols guardar les coordenades en un csv? (s/[n])')
     if res in ('s', 'S'):
         coords.to_csv(r'D:\tfg\coords.csv', index=True, index_label='index')
-    del path
 
     # ara cercam ses coordenades des nostros punts d'interés
     punts = [353, 764, 912, 1021, 1291, 1319, 1339, 1366]
@@ -34,7 +33,6 @@ if flags['Crea_csv_coords']:
     res = input('Vols guardar les coordenades dels punts d\'interés en un csv? (s/[n])')
     if res in ('s', 'S'):
         coords_punts_int.to_csv(r'D:\tfg\coords_punts_int.csv', index=True, index_label='index')
-    del coords, punts
 
 elif flags['Lector_costa']:  # no funciona
     # llegim arxiu matlab v7.3
@@ -54,6 +52,9 @@ elif flags['Lector_batimetria']:  # no funciona
 
 
 elif flags['Percentils_temp']:
+    '''
+    Per llegir els percentils guardats en un fitxer .pkl, emprau sa funció llegir_pkl() de funcions.py
+    '''
     # calculam es percentils 95 i 99 de cada any de l'altura significativa
     # per fer-ho recorrem cada arxiu del 1950 fins 2020
     percentils = {}
@@ -77,11 +78,9 @@ elif flags['Percentils_temp']:
             percentils_i[key] = df_punts[key].quantile(q=[0.95, 0.99], axis=0)
         # guardam dins un dict
         percentils[year] = percentils_i
-        del year, key, path, var_names, data_raw, df, punts, df_punts, percentils_i
 
     # guardam sa variable percentils en format .py
     res = input('Vols guardar els percentils en un fitxer .pkl? (s/[n])')
     if res in ('s', 'S'):
         with open(r"D:\tfg\percentils.pkl", 'wb') as f:
             pickle.dump(percentils, f)
-    del f

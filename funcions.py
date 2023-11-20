@@ -13,5 +13,16 @@ def reforma(data: dict, keys=None) -> dict:
 
     for key in keys:
         data[key] = np.reshape(data[key], -1)  # -1 indica que es calculi automàticament la dimensió
-    del keys, key
+    return data
+
+
+def llegir_pkl(path: str) -> dict:
+    """
+    Llegeix arxius en un fitxer .pkl
+    :param path: path del fitxer .pkl
+    :return: dict
+    """
+    import pickle
+    with open(path, 'rb') as f:
+        data = pickle.load(f)
     return data
