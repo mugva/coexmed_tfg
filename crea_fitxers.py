@@ -4,7 +4,6 @@ import scipy.io as sio
 from tqdm import tqdm
 import pickle
 
-
 # flags ______________________________________________________________________________________________________________
 flags = {
     'Crea_csv_coords': False,
@@ -37,6 +36,7 @@ if flags['Crea_csv_coords']:
 elif flags['Lector_costa']:  # no funciona
     # llegim arxiu matlab v7.3
     import h5py
+
     path = r"D:\tfg\Costas_Islas_Baleares.mat"
     f = h5py.File(path, 'r')
     # guardam les variables en un dict
@@ -84,3 +84,51 @@ elif flags['Percentils_temp']:
     if res in ('s', 'S'):
         with open(r"D:\tfg\percentils.pkl", 'wb') as f:
             pickle.dump(percentils, f)
+
+
+# ara definirem una funció que ens permeti llegir totes les dades dels punts que li indiquem, així com de les variables
+# que li indiquem, i que ens retorni un diccionari amb totes les dades ordenat per punt, any i variable.
+# en cas de omitir les variables, retornarà totes les variables i en cas d'omitir els punts, retornarà tots els punts
+def DATA(punts=None, variables=None, anys=range(1950, 2023)) -> dict:
+    """
+    Llegeix totes les dades dels punts que li indiquem, així com de les variables que li indiquem, i que ens retorni un
+    diccionari amb totes les dades ordenat per punt, any i variable.
+    :param punts: punts d'on es volen llegir les dades. 'tots' per llegir totes les dades, None per els punts d'interés
+    :param variables: variables que es volen llegir. None per llegir totes les variables
+    :param anys: anys dels quals es volen llegir les dades
+    :return: dict amb les dades llegides
+    """
+    if variables is None:
+        variables = ['elev_hydro', 'elev_wavedpt', 'Hs_wavedpt', 'Tp_wavedpt', 'Dp_wavedpt']
+    if punts is None:
+        punts = {'Portocolom': 1366, 'Es Trenc': 1291, 'Port de Sóller': 353, 'Cap Farrutx': 1319,
+                 'Men. Nord': 764, 'Men. Sud': 1021, 'Eivissa Est': 912, 'Formentera Sud': 1339}
+    elif punts == 'tots':
+        # TODO: fer que també funcioni si es volen llegir tots els punts
+        pass
+
+    data = {}
+    for anyi in tqdm(anys, desc='Llegint anys'):
+        path = r"D:\tfg\Data_CoExMed_Balears\{}.mat".format(anyi)
+        data_raw = sio.loadmat(path, variable_names=variables)
+
+        df_tot = {}
+        for key in variables:
+            df_tot[key] = pd.DataFrame(data=data_raw[key])
+
+        df_punts = {}
+        for key in df_tot.keys():
+            df_punts[key] = df_tot[key].iloc[:, list(punts.values())]
+
+        data[anyi] = df_punts
+
+    # posam amb l'ordre desitjat
+    data_ref = {}
+    for kpunt, vpunt in punts.items():
+        data_ref[kpunt] = {}
+        for var in variables:
+            data_ref[kpunt][var] = {}
+            for anyi in anys:
+                data_ref[kpunt][var][anyi] = list(data[anyi][var][vpunt])
+
+    return data_ref
