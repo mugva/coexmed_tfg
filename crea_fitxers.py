@@ -56,7 +56,7 @@ elif flags['Percentils_temp']:
     Per llegir els percentils guardats en un fitxer .pkl, emprau sa funció llegir_pkl() de funcions.py
     '''
     # calculam es percentils 95 i 99 de cada any de l'altura significativa
-    # per fer-ho recorrem cada arxiu del 1950 fins 2020
+    # per fer-ho recorrem cada arxiu del 1950 fins a 2020
     percentils = {}
     # empleam sa llibraria tqdm per fer una barra de progrés
     for year in tqdm(range(1950, 2023), desc='Càlcul percentils per any'):
@@ -67,7 +67,7 @@ elif flags['Percentils_temp']:
         df = {}
         for key in var_names:
             df[key] = pd.DataFrame(data=data_raw[key])
-        # mos quedam només amb les columnes (punts espaials) d'interés
+        # ens quedam només amb les columnes (punts espaials) d'interès
         punts = [353, 764, 912, 1021, 1291, 1319, 1339, 1366]
         df_punts = {}
         for key in df.keys():
@@ -122,7 +122,7 @@ def DATA(punts=None, variables=None, anys=range(1950, 2023)) -> dict:
 
         data[anyi] = df_punts
 
-    # posam amb l'ordre desitjat
+    # posam amb l'ordre desitjat, reformam i retornam
     data_ref = {}
     for kpunt, vpunt in punts.items():
         data_ref[kpunt] = {}

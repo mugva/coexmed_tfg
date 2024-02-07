@@ -20,7 +20,7 @@ def llegir_pkl(path: str) -> dict:
     """
     Llegeix arxius en un fitxer .pkl
     :param path: path del fitxer .pkl
-    :return: dict
+    :return: dades del fitxer .pkl en format diccionari
     """
     import pickle
     with open(path, 'rb') as f:
@@ -28,10 +28,16 @@ def llegir_pkl(path: str) -> dict:
     return data
 
 
-def round_list(l):
-    for i, v in enumerate(l):
-        l[i] = round(v)
-    return l
+def round_list(llista: list, decimals=0) -> list:
+    """
+    Arrodoneix els valors d'una llista
+    :param decimals: quantitat de decimals a la qual es vol arrodonir
+    :param llista: llista a arrodonir
+    :return: llista arrodonida
+    """
+    for i, v in enumerate(llista):
+        llista[i] = round(v, decimals)
+    return llista
 
 
 def polar_twin(ax):
