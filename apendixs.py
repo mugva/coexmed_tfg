@@ -15,14 +15,16 @@ import matplotlib.ticker as mticker
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 
 # globals
-path_Data_CoExMed_Balears = r"C:\Users\uvmar\OneDrive\Escriptori\Data_CoExMed_Balears"  # TODO: fer que aquesta variable sigui funcional
+__datapath__ = r"D:\tfg\Data_CoExMed_Balears"  # TODO: fer que aquesta variable sigui funcional
 
 #%% Apèndix A
-"""A continuació definim funcions simples que ens poden resultar de gran utilitat en el desenvolupament del treball. 
+"""
+A continuació definim funcions simples que ens poden resultar de gran utilitat en el desenvolupament del treball. 
 Sovint són creades per a facilitar la lectura del codi i per a casos molt específics.
 
 Difícilment seran depenents d'altres llibreries o funcions. Encara així aprofitam per a importar les llibreries que 
-més sovint farem servir."""
+més sovint farem servir.
+"""
 
 
 def isiterable(obj):
@@ -43,7 +45,7 @@ def lat_lon_depth() -> list:  # TODO: funciona però ho he fet de manera ràpida
     Retorna una llista amb les latituds, longituds i profunditats dels punts de la nostra malla espacial.
     :return: list [lat, lon, depth]
     """
-    path = r"D:\tfg\Data_CoExMed_Balears\1950.mat"
+    path = __datapath__ + r"\1950.mat"
     data_raw = sio.loadmat(path, variable_names=['lat', 'lon', 'depth'])
 
     return [data_raw['lat'][0], data_raw['lon'][0], data_raw['depth'][0]]
@@ -61,9 +63,11 @@ def llegir_pkl(path: str) -> dict:
 
 
 #%% Apèndix B
-"""Introduïm aqui funcions pròpies de certa complexitat que ens seran d'utilitat més envant.
+"""
+Introduïm aqui funcions pròpies de certa complexitat que ens seran d'utilitat més envant.
 
-La funcionalitat, explicació i exemples d'ús de cada funció es troba documentada dins el mateix codi."""
+La funcionalitat, explicació i exemples d'ús de cada funció es troba documentada dins el mateix codi.
+"""
 
 
 def extractor_dades(punts='def', variables='def', anys=range(1950, 2023)) -> dict:
@@ -98,7 +102,7 @@ def extractor_dades(punts='def', variables='def', anys=range(1950, 2023)) -> dic
 
     data = {}
     for anyi in tqdm(anys, desc='Llegint anys'):
-        path = r"D:\tfg\Data_CoExMed_Balears\{}.mat".format(anyi)
+        path = __datapath__ + r"\{}.mat".format(anyi)
         data_raw = sio.loadmat(path, variable_names=variables)
 
         df_tot = {}
@@ -149,11 +153,13 @@ def plot_costa_Basemap(axi, reg=None, lati=None, loni=None,
     if reg is not None:
         if not isinstance(reg, str):
             raise TypeError(
-                'El nom de la regió ha de ser un string. Els valors permesos són: IB, MALL, MEN, EIV, FOR, MALL_MEN, PITI o TEST')
+                'El nom de la regió ha de ser un string. Els valors permesos són: IB, MALL, MEN, EIV, FOR, MALL_MEN, '
+                'PITI o TEST')
         reg = reg.upper()
         if reg not in regions_permeses:
             raise ValueError(
-                'El nom de la regió no és vàlid. Els valors permesos són: IB, MALL, MEN, EIV, FOR, MALL_MEN, PITI o TEST')
+                'El nom de la regió no és vàlid. Els valors permesos són: IB, MALL, MEN, EIV, FOR, MALL_MEN, '
+                'PITI o TEST')
         elif reg == 'IB':
             lati = [38.5, 40.5]
             loni = [1., 4.5]
@@ -202,7 +208,7 @@ def crear_percentils(var_names=None, punts=None, full_time_series=False) -> None
     if punts is None:
         punts = [353, 764, 912, 1021, 1291, 1319, 1339, 1366]
     elif punts == 'tot':
-        punts = list(range(0, np.shape(sio.loadmat(r"D:\tfg\Data_CoExMed_Balears\1950.mat")['lat'])[1]))
+        punts = list(range(0, np.shape(sio.loadmat(__datapath__+r"\1950.mat")['lat'])[1]))
     elif not isiterable(punts):
         raise TypeError('punts ha de ser un objecte iterable tot i que sigui d\'un sol element. Ex.: (353,) o [353]')
 
@@ -223,7 +229,7 @@ def crear_percentils(var_names=None, punts=None, full_time_series=False) -> None
     for year in tqdm(range(1950, 2023), desc='Càlcul percentils per any'):
         # TODO: fer que l'usuari tengui l'opció de aturar el procés (per cada 10 anys per exemple demanar si es vol continuar)
         # TODO: fer que funcioni si es vol calcular la sèrie temporal completa
-        data_raw = sio.loadmat(r"D:\tfg\Data_CoExMed_Balears\{}.mat".format(year), variable_names=var_names)
+        data_raw = sio.loadmat(__datapath__ + r"\{}.mat".format(year), variable_names=var_names)
         # cream diccionari de dataframes
         if not full_time_series:
             df = {}
