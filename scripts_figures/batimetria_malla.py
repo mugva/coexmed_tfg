@@ -1,9 +1,10 @@
 from apendixs import *
+from apendixs import _path
 
 lat, lon, depth = lat_lon_depth()  # extreim les dades
 
 # ara llegirem el colormap que volem
-rgb = np.loadtxt(r"D:\tfg\codi\coexmed_tfg\figures\cmaps\cmocean_deep.rgb") / 255  # normalitzam els valors
+rgb = np.loadtxt(_path + r"\figures\cmaps\cmocean_deep.rgb") / 255  # normalitzam els valors
 cmocean_deep = ListedColormap(rgb)
 
 # plot
@@ -65,5 +66,5 @@ gl_inset2.ylocator = mticker.FixedLocator([38.75, 38.85])  # adjust as per your 
 plt.show()
 
 # guardam la figura
-# fig.savefig(r"D:\tfg\codi\coexmed_tfg\figures\batimetria_malla.pdf", bbox_inches='tight')
-# fig.savefig(r"D:\tfg\codi\coexmed_tfg\figures\batimetria_malla.png", bbox_inches='tight')
+# fig.savefig(_path + r"\figures\batimetria_malla.pdf", bbox_inches='tight')
+# fig.savefig(_path + r"\figures\batimetria_malla.png", bbox_inches='tight')

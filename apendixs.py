@@ -15,7 +15,8 @@ import matplotlib.ticker as mticker
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 
 # globals
-__datapath__ = r"D:\tfg\Data_CoExMed_Balears"  # TODO: fer que aquesta variable sigui funcional
+_path = r"D:\tfg\codi\coexmed_tfg"
+_pathdata = r"D:\tfg\Data_CoExMed_Balears"
 
 #%% Apèndix A
 """
@@ -45,7 +46,7 @@ def lat_lon_depth() -> list:  # TODO: funciona però ho he fet de manera ràpida
     Retorna una llista amb les latituds, longituds i profunditats dels punts de la nostra malla espacial.
     :return: list [lat, lon, depth]
     """
-    path = __datapath__ + r"\1950.mat"
+    path = _pathdata + r"\1950.mat"
     data_raw = sio.loadmat(path, variable_names=['lat', 'lon', 'depth'])
 
     return [data_raw['lat'][0], data_raw['lon'][0], data_raw['depth'][0]]
@@ -102,7 +103,7 @@ def extractor_dades(punts='def', variables='def', anys=range(1950, 2023)) -> dic
 
     data = {}
     for anyi in tqdm(anys, desc='Llegint anys'):
-        path = __datapath__ + r"\{}.mat".format(anyi)
+        path = _pathdata + r"\{}.mat".format(anyi)
         data_raw = sio.loadmat(path, variable_names=variables)
 
         df_tot = {}
@@ -208,7 +209,7 @@ def crear_percentils(var_names=None, punts=None, full_time_series=False) -> None
     if punts is None:
         punts = [353, 764, 912, 1021, 1291, 1319, 1339, 1366]
     elif punts == 'tot':
-        punts = list(range(0, np.shape(sio.loadmat(__datapath__+r"\1950.mat")['lat'])[1]))
+        punts = list(range(0, np.shape(sio.loadmat(_pathdata + r"\1950.mat")['lat'])[1]))
     elif not isiterable(punts):
         raise TypeError('punts ha de ser un objecte iterable tot i que sigui d\'un sol element. Ex.: (353,) o [353]')
 
@@ -229,7 +230,7 @@ def crear_percentils(var_names=None, punts=None, full_time_series=False) -> None
     for year in tqdm(range(1950, 2023), desc='Càlcul percentils per any'):
         # TODO: fer que l'usuari tengui l'opció de aturar el procés (per cada 10 anys per exemple demanar si es vol continuar)
         # TODO: fer que funcioni si es vol calcular la sèrie temporal completa
-        data_raw = sio.loadmat(__datapath__ + r"\{}.mat".format(year), variable_names=var_names)
+        data_raw = sio.loadmat(_pathdata + r"\{}.mat".format(year), variable_names=var_names)
         # cream diccionari de dataframes
         if not full_time_series:
             df = {}
@@ -262,7 +263,7 @@ def crear_percentils(var_names=None, punts=None, full_time_series=False) -> None
         nom_arxiu = input('Nom de l\'arxiu ("percentils" per defecte) (sense extensió): ')
         if nom_arxiu == '':
             nom_arxiu = 'percentils'
-        with open(r"D:\tfg\pkls\{}.pkl".format(nom_arxiu), 'wb') as f:
+        with open(_path + r"\pkls\{}.pkl".format(nom_arxiu), 'wb') as f:
             pickle.dump(percentils_res, f)
 
 # COMPROVACIÓ

@@ -5,6 +5,7 @@ per tant, hem de fer servir les funcions sinus i cosinus per a calcular-ne la mi
 """
 
 from apendixs import *
+from apendixs import _path, _pathdata
 
 var_name = 'Dp_wavedpt'
 data_mean_angle = None
@@ -21,7 +22,7 @@ pas = 200
 for reg in tqdm(range(0, 1400, pas), desc=f'Recorrem punts de malla de {pas} en {pas}'):
     data_sin, data_cos = None, None
     for year in range(1950, 2023):
-        data_raw = sio.loadmat(r"C:\Users\uvmar\OneDrive\Escriptori\Data_CoExMed_Balears\{}.mat".format(year), variable_names=(var_name,))
+        data_raw = sio.loadmat(_pathdata + r"\{}.mat".format(year), variable_names=(var_name,))
         data = np.round(data_raw[var_name]).astype(int)[:, reg:reg + pas]
         data_radians = np.round(np.deg2rad(data), 4)
         data_radians = pd.DataFrame(data_radians)
@@ -44,5 +45,5 @@ if res in ('s', 'S'):
     nom_arxiu = input('Nom de l\'arxiu ("mitjana_Dp_wavedpt_FTS" per defecte) (sense extensió): ')
     if nom_arxiu == '':
         nom_arxiu = 'mitjana_Dp_wavedpt_FTS'
-    with open(r"D:\tfg\pkls\{}.pkl".format(nom_arxiu), 'wb') as f:
+    with open(_path + r"\pkls\{}.pkl".format(nom_arxiu), 'wb') as f:
         pickle.dump(data_mean_res, f)
