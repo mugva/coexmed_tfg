@@ -66,5 +66,5 @@ gl_inset2.ylocator = mticker.FixedLocator([38.75, 38.85])  # adjust as per your 
 plt.show()
 
 # guardam la figura
-# fig.savefig(_path + r"\figures\batimetria_malla.pdf", bbox_inches='tight')
+# fig.savefig(_path + r"\figures\pdf\batimetria_malla.pdf", bbox_inches='tight')
 # fig.savefig(_path + r"\figures\batimetria_malla.png", bbox_inches='tight')
