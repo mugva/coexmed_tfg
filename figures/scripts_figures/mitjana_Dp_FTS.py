@@ -49,4 +49,4 @@ plt.show()
 
 # guardam la figura
 # fig.savefig(_path + r"\figures\pdf\mitjana_Dp_FTS.pdf", bbox_inches='tight')
-# fig.savefig(_path + r"\figures\mitjana_Dp_FTS.png", bbox_inches='tight')
+# fig.savefig(_path + r"\figures\png\mitjana_Dp_FTS.png", bbox_inches='tight')

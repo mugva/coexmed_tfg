@@ -70,4 +70,4 @@ plt.show()
 
 # save the plot
 # fig.savefig(_path + r"\figures\pdf\percentils_Hs_FTS.pdf", bbox_inches='tight')
-# fig.savefig(_path + r"\figures\percentils_Hs_FTS.png", bbox_inches='tight')
+# fig.savefig(_path + r"\figures\png\percentils_Hs_FTS.png", bbox_inches='tight')
